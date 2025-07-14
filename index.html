@@ -2,161 +2,158 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Regulament Oficial - Echipa La Costel</title>
+  <title>Chestionar Auto Stupid</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: sans-serif;
       background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-      color: #222;
-    }
-
-    header {
-      background-color: #263238;
-      color: white;
-      padding: 1rem 2rem;
-      text-align: center;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 2rem;
-    }
-
-    main {
-      max-width: 900px;
+      padding: 20px;
+      max-width: 600px;
       margin: auto;
-      padding: 2rem;
     }
-
-    .regula {
-      background-color: #ffffff;
-      border-left: 5px solid #009688;
-      margin-bottom: 1.5rem;
-      padding: 1rem 1.5rem;
-      border-radius: 4px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    #scoreboard {
+      background-color: #fff3cd;
+      padding: 10px;
+      border: 1px solid #ffeeba;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-weight: bold;
     }
-
-    .regula h2 {
-      margin: 0 0 0.5rem 0;
-      font-size: 1.2rem;
+    #quiz-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-
-    footer {
+    .question {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin: 8px 0;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    #result {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 30px;
       text-align: center;
-      padding: 2rem;
-      font-size: 0.9rem;
-      color: #777;
     }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>Regulament - Echipa "La Costel"</h1>
-  <p>Versiunea 2025 • Aprobat de nea Gică și comisia de pe bancă</p>
-</header>
+  <h1>Chestionar Auto (Ediția pentru Oameni Plictisiți)</h1>
 
-<main>
+  <div id="scoreboard">
+    ✅ Corecte: <span id="corecte">0</span> |
+    ❌ Greșite: <span id="gresite">0</span>
+  </div>
 
-  <section class="regula">
-    <h2>1. Mingea trebuie salutată înainte de începerea meciului.</h2>
-    <p>Orice lipsă de politețe față de minge se pedepsește cu 2 minute de tăcere totală pe teren.</p>
-  </section>
+  <div id="quiz-box">
+    <div class="question" id="question-text"></div>
+    <form id="answer-form"></form>
+    <button onclick="urmatoareaIntrebare()">Următoarea</button>
+  </div>
 
-  <section class="regula">
-    <h2>2. Se poate marca doar dacă ai cântat „Frunză verde” în gând.</h2>
-    <p>Arbitrul verifică telepatic. Dacă nu, coșul nu se pune.</p>
-  </section>
+  <div id="result"></div>
 
-  <section class="regula">
-    <h2>3. Dacă mingea atinge accidental urechea unui jucător, se joacă înapoi cu cotul.</h2>
-  </section>
+  <script>
+    const intrebari = [
+      { intrebare: "1. Ce faci dacă roata explodează și zboară în spațiu?", optiuni: ["Sari după ea", "Îți iei alta", "Sună la helpline"], corect: 2 },
+      { intrebare: "2. Ce înseamnă linia roz cu glitter?", optiuni: ["Drum de prințese", "Treci dansând", "Accelerezi cu ochii închiși"], corect: 0 },
+      { intrebare: "3. Dacă mașina râde, ce faci?", optiuni: ["O gâdili", "E normal", "Fugi!"], corect: 1 },
+      { intrebare: "4. Poți conduce dacă ești pepene?", optiuni: ["Permis D", "Doar noaptea", "N-ai degete"], corect: 2 },
+      { intrebare: "5. Indicator cu pisică teleportată?", optiuni: ["Pisici magice", "Teren SF", "Glitch"], corect: 0 },
+      { intrebare: "6. Parcat pe nori?", optiuni: ["Suni meteo", "Scoți ancora", "Folosești barca"], corect: 1 },
+      { intrebare: "7. Drift pe covor roșu?", optiuni: ["Cu Chuck Norris", "Dacă e ud", "Rușine!"], corect: 2 },
+      { intrebare: "8. Claxonezi girafă?", optiuni: ["Dacă e luni", "O saluți", "Dacă are cască"], corect: 1 },
+      { intrebare: "9. Bordul zice 'I love you'?", optiuni: ["E îndrăgostit", "Are AI", "E capcană rusească"], corect: 1 },
+      { intrebare: "10. Plin cu suc de mere?", optiuni: ["Mergi bio", "Explodezi", "Devii tractor"], corect: 0 },
+      { intrebare: "11. Prioritate ninja invizibil?", optiuni: ["Dacă-l simți", "Nu-l vezi", "Test!"], corect: 0 },
+      { intrebare: "12. Drumul devine tobogan?", optiuni: ["Te dai", "Mod sanie", "Colac!"], corect: 1 },
+      { intrebare: "13. STOP și sandwich?", optiuni: ["Pauză legală", "Panou glumă", "Zonă de foame"], corect: 0 },
+      { intrebare: "14. Parcaj pe Lună?", optiuni: ["Dacă plătești NASA", "Numai în weekend", "Doar Elon Musk"], corect: 0 },
+      { intrebare: "15. Volan = brânză?", optiuni: ["Găsești altul", "Mănânci", "Ungi cu gem"], corect: 0 },
+      { intrebare: "16. Claxon în vis?", optiuni: ["Doar în somn adânc", "Da, dar degeaba", "Morfeu interzice"], corect: 1 },
+      { intrebare: "17. Frâne spun 'Aoleu'?", optiuni: ["Frâne spirituale", "Probleme serioase", "Desene"], corect: 1 },
+      { intrebare: "18. Depășești pasăre?", optiuni: ["Bandă zburătoare", "Cu girofar", "Permis Z"], corect: 0 },
+      { intrebare: "19. Drift în bibliotecă?", optiuni: ["Tăcere", "Electrică", "Niciodată!"], corect: 2 },
+      { intrebare: "20. GPS cu manele?", optiuni: ["Închizi sonorul", "E vibe", "Trimite-l la școală"], corect: 0 },
+    ];
 
-  <section class="regula">
-    <h2>4. Fiecare jucător trebuie să poarte câte un obiect roz ascuns.</h2>
-    <p>Se consideră amuletă norocoasă. Fără obiect = 1 punct în minus automat.</p>
-  </section>
+    let index = 0;
+    let scor = 0;
+    let gresite = 0;
 
-  <section class="regula">
-    <h2>5. Când se strigă „Cartof!”, mingea devine imposibil de pierdut.</h2>
-    <p>Regula e valabilă doar în repriza a doua.</p>
-  </section>
+    function afiseazaIntrebare() {
+      const q = intrebari[index];
+      document.getElementById("question-text").textContent = q.intrebare;
 
-  <section class="regula">
-    <h2>6. Lui Stevie i-a căzut gușa pe jos.</h2>
-    <p>În acest caz, meciul se întrerupe și toți jucătorii trebuie să joace în reluare faza anterioară, cu mișcări lente.</p>
-  </section>
+      const form = document.getElementById("answer-form");
+      form.innerHTML = "";
 
-  <section class="regula">
-    <h2>7. Antrenorul poate cere schimbare doar dacă face o tumbă laterală.</h2>
-  </section>
+      q.optiuni.forEach((opt, i) => {
+        const label = document.createElement("label");
+        label.innerHTML = `<input type="radio" name="raspuns" value="${i}"> ${opt}`;
+        form.appendChild(label);
+      });
+    }
 
-  <section class="regula">
-    <h2>8. Dacă cineva spune „foc la ghete”, se joacă următoarele 2 minute doar cu mâna stângă.</h2>
-  </section>
+    function actualizeazaScor() {
+      document.getElementById("corecte").textContent = scor;
+      document.getElementById("gresite").textContent = gresite;
+    }
 
-  <section class="regula">
-    <h2>9. Orice jucător care strănută trebuie să primească mingea.</h2>
-    <p>Se consideră semnal divin. Mingea se predă imediat, fără comentarii.</p>
-  </section>
+    function urmatoareaIntrebare() {
+      const checked = document.querySelector('input[name="raspuns"]:checked');
+      if (!checked) {
+        alert("Selectează un răspuns!");
+        return;
+      }
 
-  <section class="regula">
-    <h2>10. În timpul time-out-ului, se dansează Hora Micului Dejun.</h2>
-    <p>Coregrafia se învață în cantonament.</p>
-  </section>
+      const raspuns = parseInt(checked.value);
+      if (raspuns === intrebari[index].corect) {
+        scor++;
+      } else {
+        gresite++;
+      }
 
-  <section class="regula">
-    <h2>11. Mingea care sare dincolo de gard devine „minge-fantomă” pentru 30 de secunde.</h2>
-    <p>În acest timp, orice atingere cu ea nu e valabilă.</p>
-  </section>
+      actualizeazaScor();
+      index++;
 
-  <section class="regula">
-    <h2>12. Jucătorii trebuie să mimeze că dau autografe când înscriu de 3 puncte.</h2>
-  </section>
+      if (index < intrebari.length) {
+        afiseazaIntrebare();
+      } else {
+        afiseazaRezultatFinal();
+      }
+    }
 
-  <section class="regula">
-    <h2>13. Dacă scorul este egal la minutul 13, câștigă cine ține mingea mai sus în aer timp de 10 secunde.</h2>
-  </section>
+    function afiseazaRezultatFinal() {
+      document.getElementById("quiz-box").style.display = "none";
+      const result = document.getElementById("result");
+      let mesaj;
 
-  <section class="regula">
-    <h2>14. Când plouă, terenul se declară „zonă de patinaj artistic”.</h2>
-    <p>Jocul continuă, dar se punctează și piruetele.</p>
-  </section>
+      if (scor === 20) mesaj = "Perfect! Ești șoferul glumelor supreme!";
+      else if (scor >= 15) mesaj = "Bravo! Nu conduci bine, dar măcar ești amuzant.";
+      else if (scor >= 10) mesaj = "Ai trecut cu noroc. Sau cu GPS-ul pe manele.";
+      else mesaj = "Ți-ai parcat logica într-un copac. Mai încearcă!";
 
-  <section class="regula">
-    <h2>15. Doar jucătorii care știu să bată din palme sincron pot iniția contraatacuri.</h2>
-  </section>
+      result.innerHTML = `
+        <p>✅ Ai răspuns corect la <strong>${scor}</strong> întrebări.</p>
+        <p>❌ Ai greșit <strong>${gresite}</strong> întrebări.</p>
+        <p><br>${mesaj}</p>
+      `;
+    }
 
-  <section class="regula">
-    <h2>16. O dată pe meci, arbitrul poate introduce mingea în joc cu o poezioară improvizată.</h2>
-  </section>
-
-  <section class="regula">
-    <h2>17. În fiecare repriză, mingea se spală cu apă minerală plată.</h2>
-  </section>
-
-  <section class="regula">
-    <h2>18. Dacă un jucător râde prea tare, primește „fault de veselie”.</h2>
-    <p>Penalizare: o glumă spusă cu voce tare și un pas în afara terenului.</p>
-  </section>
-
-  <section class="regula">
-    <h2>19. Se poate pasa mingea doar după ce spui o poreclă jucătorului căruia o dai.</h2>
-  </section>
-
-  <section class="regula">
-    <h2>20. La final, câștigătorii nu primesc trofeu, ci o ciorbă de burtă servită de Costel.</h2>
-  </section>
-
-</main>
-
-<footer>
-  &copy; 2025 Echipa La Costel. Nu încercați asta în meciuri reale.
-</footer>
+    afiseazaIntrebare();
+    actualizeazaScor();
+  </script>
 
 </body>
 </html>
