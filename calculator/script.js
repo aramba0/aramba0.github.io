@@ -36,7 +36,7 @@ function addToDisplay(data, visualText){
                     input.innerText+=visualText;
                 }
             }else{
-                input.innerText=eval(realInputText);
+                input.innerText='sugi pula vlade';
                 realInputText=input.innerText;
             }
         }
